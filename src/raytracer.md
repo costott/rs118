@@ -542,7 +542,7 @@ Update your scene so you have four spheres:
 
 - Center `(0, 0, -1)`, radius `0.5`, `(0.7, 0.3, 0.3)` lambertian
 - Center `(-1, 0 -1)`, radius `0.5`, `(0.8, 0.8, 0.8)` metal
-- Center `(0, 0, -1)`, radius `0.5`, `(0.8, 0.6, 0.2)` metal
+- Center `(1, 0, -1)`, radius `0.5`, `(0.8, 0.6, 0.2)` metal
 - Center `(0, -100.5, -1)`, radius `100`, `(0.8, 0.8, 0)` lambertian
 
 Your new render should look like this. See how the metal spheres are reflecting the centre sphere, and you can see the other half of the ground sphere behind them.
