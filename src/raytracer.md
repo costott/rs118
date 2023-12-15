@@ -507,7 +507,7 @@ The `Material` impl for `Lambertian` should contain the logic that's currently i
 
 We need to make our objects aware of the fact that they can be different materials too. The `Sphere` struct needs an extra field, `material`, the type of which should be any type implementing the `Material` trait. That's right, your struct is going to need to be generic.
 
-Add a field `reflection` to the `Hit` struct too. The idea is that then the `Object::hit` method populates that field if the hit caused a reflected ray to be generated. Update `Sphere::hit` to call the `Material::scatter` from it's `material` field, and use that to fill the `reflection` field of `Hit`.
+Add a field `reflection` to the `Hit` struct too. The idea is that then the `Object::hit` method populates that field if the hit caused a reflected ray to be generated. Update `Sphere::hit` to call the `Material::scatter` from its `material` field, and use that to fill the `reflection` field of `Hit`.
 
 Update `ray::colour` to use the new `Material` abstraction. If there is a reflected ray, make the recursive call same as before, returning the result multiplied by the colour attenuation.
 You'll need to update the two spheres created in `main` too to account for this. Make them both have colour `(0.5, 0.5, 0.5)`
@@ -536,7 +536,7 @@ $$r = v - 2 (\mathbf v \cdot \mathbf n) \mathbf n$$
 
 Write a function `reflect(v: Vec3, normal: &Vec3) -> Vec3` to implement this. You could put this as a private method of `Metal`, or as a module-scope function at the bottom of `material.rs`.
 
-This function is used to reflect rays off our metal material. Add a struct `Metal` that has a single `Colour` field, and implement `Material` for it, calculating this reflected ray. Note that the reflected ray should only be returned if the dot product of it's direction with the hit normal is greater than zero. A reflection ray that is at an angle of greater than 90 degrees to the normal doesn't make sense (how are you reflecting from under the surface?).
+This function is used to reflect rays off our metal material. Add a struct `Metal` that has a single `Colour` field, and implement `Material` for it, calculating this reflected ray. Note that the reflected ray should only be returned if the dot product of its direction with the hit normal is greater than zero. A reflection ray that is at an angle of greater than 90 degrees to the normal doesn't make sense (how are you reflecting from under the surface?).
 
 Update your scene so you have four spheres:
 
@@ -571,7 +571,7 @@ where $\theta$ and $\theta '$ are angles from the normal, and $\eta$ and $\eta '
 
 {{#include ./img/rt/fig-1.13-refraction.svg}}
 
-On the refracted side of the surface there is a refracted ray $\mathbf{R} '$ and a normal $\mathbf{n}'$, and an angle $\theta '$ between them. The ray $\mathbf{R} '$ can be split into the sum of it's two components parallel and perpendicular to $\mathbf{n}'$:
+On the refracted side of the surface there is a refracted ray $\mathbf{R} '$ and a normal $\mathbf{n}'$, and an angle $\theta '$ between them. The ray $\mathbf{R} '$ can be split into the sum of its two components parallel and perpendicular to $\mathbf{n}'$:
 
 $$
 \mathbf{R}' = \mathbf{R}_{\perp}' + \mathbf{R}_{\parallel}'
@@ -620,9 +620,9 @@ Write a small helper function in `material.rs` to return the direction of the re
 
 ### Task 9.2: Dielectric
 
-You can refract rays, so let's add a dielectric material that does just that with it's scatter method. Create a new struct `Dielectric` with a single field, it's refraction ratio ($\frac{\eta}{\eta '}$). Create a new `Material` impl for it, such that `scatter` returns a new reflected (\*technically it's refracted now) ray with a colour attenutation of 1 (no attenuation), and direction vector calculated by your refract function. Don't forget to normalise your incident ray before using it, as we made the assumption that $\mathbf{a} = \mathbf{b} = 1$ when we did the maths above.
+You can refract rays, so let's add a dielectric material that does just that with its scatter method. Create a new struct `Dielectric` with a single field, its refraction ratio ($\frac{\eta}{\eta '}$). Create a new `Material` impl for it, such that `scatter` returns a new reflected (\*technically it's refracted now) ray with a colour attenutation of 1 (no attenuation), and direction vector calculated by your refract function. Don't forget to normalise your incident ray before using it, as we made the assumption that $\mathbf{a} = \mathbf{b} = 1$ when we did the maths above.
 
-An interesting thing to note is that if your ray comes from outside the sphere (ie, `hit.front_face == true`), then you will need to set the refraction ratio to be it's reciprocal, as $\eta$ and $\eta '$ are flipped.
+An interesting thing to note is that if your ray comes from outside the sphere (ie, `hit.front_face == true`), then you will need to set the refraction ratio to be its reciprocal, as $\eta$ and $\eta '$ are flipped.
 
 Update the scene to change the left sphere to be a dielectric with a ratio of 1.5 (roughly glass), then render it and see what you get.
 
@@ -858,4 +858,4 @@ What you've built is actually an incredibly cool thing, modelling physical light
 
 Play around with the scene, change the objects and their positions, put the camera at weird angles, see what cool pictures you can generate.
 
-There are two more books that follow on from this [Ray Tracing: The Next Week](https://raytracing.github.io/books/RayTracingTheNextWeek.html) and [Ray Tracing: The Rest of Your Life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html), which go on and add a bunch more features to the ray tracer. This was only up to the end of the first book so, the others are certainly worth a read, though you'll have to [carcinise](https://en.wikipedia.org/wiki/Carcinisation) it yourself (or do it in C++, which despite all it's problems is still widely used and a good skill to have).
+There are two more books that follow on from this [Ray Tracing: The Next Week](https://raytracing.github.io/books/RayTracingTheNextWeek.html) and [Ray Tracing: The Rest of Your Life](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html), which go on and add a bunch more features to the ray tracer. This was only up to the end of the first book so, the others are certainly worth a read, though you'll have to [carcinise](https://en.wikipedia.org/wiki/Carcinisation) it yourself (or do it in C++, which despite all its problems is still widely used and a good skill to have).
